@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+    <script type="text/javascript" src="../JS/angularMain.js"></script>
+    <style>
+        ._md-visually-hidden{
+            display: none;
+        }
+    </style>
+</head>
+<body ng-app="MainApp" ng-controller="MainCtrl" layout="row" layout-align="center center">
+<md-card flex="75" layout="column" layout-wrap layout-padding>
+    <md-card-content>
+        <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always" md-swipe-content="true">
+            <md-tab label="Login">
+                <md-tab-body>
+                    <form name="userForm" ng-submit="loginFunc()">
+                        <md-input-container>
+                            <label>User Name</label>
+                            <input type="text" name="username" ng-model="loginObj.username" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Password</label>
+                            <input type="password" name="password" ng-model="loginObj.password" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <md-button type="submit" class="md-primary md-raised">Submit</md-button>
+                        </md-input-container>
+                    </form>
+                </md-tab-body>
+            </md-tab>
+            <md-tab label="Register">
+                <md-tab-body>
+                    <form name="registrationForm" ng-submit="registerUser()">
+                        <div layout="row" layout-padding>
+                            <div layout-padding layout="column" flex>
+                                <md-input-container>
+                                    <label>First Name</label>
+                                    <input ng-model="profile.firstName" ng-disabled="false" name="firstname" required md-maxlength="10" minlength="4">
+
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Last Name</label>
+                                    <input ng-model="profile.lastName" ng-disabled="false" name="lastName" required md-maxlength="10" minlength="4">
+
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Mobile Number</label>
+                                    <input type="tel" ng-model="profile.mobileNumber" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Email ID</label>
+                                    <input type="email" ng-model="profile.emailId" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+                                </md-input-container>
+                            </div>
+                            <div layout-padding layout="column" flex>
+                                <md-input-container>
+                                    <label>Department</label>
+                                    <input ng-model="profile.department" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Joining Date</label>
+                                    <input ng-model="profile.joiningDate" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>User Name</label>
+                                    <input ng-model="profile.username" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Password</label>
+                                    <input ng-model="profile.password" ng-disabled="false" required type="password" name="lastName" required md-maxlength="10" minlength="4">
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <md-input-container>
+                            <md-button type="submit" class="md-primary md-raised">Submit</md-button>
+                        </md-input-container>
+                    </form>
+
+                </md-tab-body>
+            </md-tab>
+
+        </md-tabs>
+    </md-card-content>
+</md-card>
+
+</body>
+</html>

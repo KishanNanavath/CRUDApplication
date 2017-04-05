@@ -1,0 +1,22 @@
+{
+  "name": "crudapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.3",
+    "body-parser": "1.14.1",
+    "crypto": "0.0.3",
+    "mongodb": "2.0.52",
+    "underscore": "1.8.3",
+    "express": "4.13.3",
+    "express-jwt": "3.3.0",
+    "express-session": "^1.14.1",
+    "path": "^0.12.7"
+  }
+}
