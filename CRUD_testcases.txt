@@ -1,0 +1,69 @@
+Login :
+
+Verify that the login screen is having option to enter username and password with submit button
+
+Verify that user is able to login with valid username and password
+
+Verify that validation message gets displayed in case user leaves username or password field as blank
+
+Verify that the password is in encrypted form when entered
+For security point of view, in case of in correct credentials user is displayed the message like "incorrect username or password" instead of exact message pointing at the field that is incorrect. As message like "incorrect username" will aid hacker in bruteforcing the fields one by one
+
+Verify that once logged in, clicking back button doesn't logout user
+
+
+
+Registration :
+
+Verify that all the specified fields are present on the registration page
+
+Verify the page has both submit and reset buttons at the end
+
+Verify that clicking submit button after entering all the required fields, submits the data to the server
+
+Verify that clicking cancel/reset button after entering all the required fields, cancels the submit request and resets all the fields
+
+Verify that whenever possible validation should take place at client side
+
+Verify that not filling the mandatory fields and clicking submit button will lead to validation error
+
+Check validation on email fields (only valid dates and valid email Ids should be allowed
+
+Check validation on numeric fields by entering alphabets and special characters
+
+
+
+Profile :
+
+verify the page has edit button
+
+Verify that clicking edit button enables all fields
+
+Verify the page has both update and cancel buttons on clicking edit button
+
+Verify that clicking cancel button disables all the fields
+
+Verify that clicking submit button after entering all the required fields, submits the data to the server
+
+
+
+
+Leave History :
+
+Verify that all the leaves corresponding to the user are displayed
+
+verify the page has delete button for all the leaves with status "Pending"
+
+verify that leave object is deleted in the DB after clicking delete button
+
+
+
+
+
+Request Leave :
+
+Verify that all the specified fields are present on the page
+
+Verify that clicking submit button after entering all the required fields, submits the data to the server
+
+verify the updated leave is listed under Leave History page
