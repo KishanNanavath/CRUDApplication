@@ -11,5 +11,15 @@ exports.employeeModel = function(){
     this.department = "";
     this.salary = "";
     this.joiningDate = "";
-    this.status = "";
-}
+    this.status = "active";
+};
+
+exports.leaveModel = function(){
+    this.employeeId="";
+    this.fromDate="";
+    this.toDate="";
+    this.noOfDays=0;
+    this.remarks="";
+    this.status="Pending";
+    this.leaveId = 0;
+};

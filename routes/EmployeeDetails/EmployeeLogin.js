@@ -7,6 +7,7 @@ var dbConfig = require('../../Environment/mongoDatabase.js');
 var inputConfig = require('./config/input.js');
 var underscore = require('underscore');
 var crypto = require('crypto');
+var async = require('async');
 
 exports.login = function login(req, callback) {
 
@@ -50,8 +51,113 @@ exports.login = function login(req, callback) {
     }
 };
 
-exports.upsertUser = function (req, callback) {
-    console.log("fun",req.body);
+exports.register = function (req, callback) {
+    console.log("Entering register");
+//    console.log("fun",req.body);
+    if(!(!req.body ||
+        !req.body.username ||
+        req.body.username.toString().trim().length === 0 ||
+        !req.body.password ||
+        req.body.password.toString().trim().length === 0 ||
+        !req.body.mobileNumber ||
+        req.body.mobileNumber.toString().trim().length === 0 ||
+        !req.body.emailId ||
+        req.body.emailId.toString().trim().length === 0 )){
+
+        validateUser(req, function (error,result) {
+            if(error){
+                return callback(true,result);
+            }
+            else{
+                req.body.password = crypto.createHash('md5').update(req.body.password).digest('hex');
+
+                upsertUser(req, function (error, result) {
+                    return callback(false,result);
+                })
+            }
+        });
+    }
+    else{
+        return callback(true,outputResult(400,"Bad or ill-formed request.."))
+    }
+};
+
+function validateUser(req,callback){
+    console.log("Entering validateUser");
+
+    var username = req.body.username;
+    var emailId = req.body.emailId;
+
+    var db = dbConfig.mongoDbConn;
+    var empCred = db.collection('EmployeeCredentials');
+
+    async.parallel({
+        "username":function (asyncCallback) {
+            var countQuery = {
+                "userEntity.username":username
+            };
+
+            console.log("countQuery : "+JSON.stringify(countQuery));
+
+            empCred.count(countQuery,function (error, count) {
+                if(error){
+                    return asyncCallback(true);
+                }
+                else{
+                    console.log(count);
+                    if(count > 0){
+                        return asyncCallback(false,true);
+                    }
+                    else{
+                        return asyncCallback(false,false);
+                    }
+                }
+            })
+        },
+        "emailId":function (asyncCallback) {
+            var countQuery = {
+                "userEntity.emailId":emailId
+            };
+            console.log("countQuery : "+JSON.stringify(countQuery));
+
+            empCred.count(countQuery,function (error, count) {
+                if(error){
+                    return asyncCallback(true);
+                }
+                else{
+                    console.log(count);
+                    if(count > 0){
+                        return asyncCallback(false,true);
+                    }
+                    else{
+                        asyncCallback(false,false);
+                    }
+                }
+            })
+        }
+    }, function (error, result) {
+        if(error){
+            return callback(true,outputResult(500,"Internal Server Error."))
+        }
+        else{
+            if(result.username && result.emailId){
+                return callback(true,outputResult(401,"Username and Email Id Already Exists"))
+            }
+            else if(result.username){
+                return callback(true,outputResult(401,"Username Already Exists"))
+            }
+            else if(result.emailId){
+                return callback(true,outputResult(401,"Email Id Already Exists"))
+            }
+            else{
+                return callback(false)
+            }
+        }
+    });
+}
+
+function upsertUser(req, callback) {
+    console.log("Entering upsertUser");
     if(!(!req.body ||
         !req.body.username ||
         req.body.username.toString().trim().length === 0 ||
@@ -64,75 +170,73 @@ exports.upsertUser = function (req, callback) {
 
         var employee = new inputConfig.employeeModel();
         employee = underscore.extend(employee,req.body);
-        employee.password = crypto.createHash('md5').update(employee.password).digest('hex');
 
-        generateEmployeeId(function (error,result) {
-            if(error){
-                return callback(true,outputResult(500,"Internal Server Error."))
-            }
-            else{
-                var year = (new Date().getFullYear()).toString().slice(-2);
-                employee.employeeId = "EMP" + year + ('00' + result).slice(-6);
+        var newEmpId = "";
+        async.series([
+            function (asyncCallback) {
+                if(!employee.employeeId || employee.employeeId.toString().trim().length === 0){
+                    generateEmployeeId(function (error,result) {
+                        if(error){
+                            return asyncCallback(true);
+                        }
+                        else{
+                            var year = (new Date().getFullYear()).toString().slice(-2);
+                            newEmpId = "EMP" + year + ('00' + result).slice(-6);
+                            return asyncCallback(false);
+                        }
+                    });
+                }
+                else{
+                    newEmpId = employee.employeeId;
+                    return asyncCallback(false);
+                }
+            },
+            function (asyncCallback) {
+                employee.employeeId = newEmpId;
                 var db = dbConfig.mongoDbConn;
 
                 var empCred = db.collection('EmployeeCredentials');
 
                 var updateQuery = {
                     "userEntity.username":employee.username,
-                    "userEntity.password":employee.password,
-                    "userEntity.mobileNumber":employee.mobileNumber,
+                    //"userEntity.password":employee.password,
+                    //"userEntity.mobileNumber":employee.mobileNumber,
                     "userEntity.emailId":employee.emailId
                 };
-                console.log(JSON.stringify(updateQuery))
+                console.log(JSON.stringify(updateQuery));
 
-                employee.password = crypto.createHash('md5').update(employee.password).digest('hex');
                 var setQuery = {
                     "userEntity":employee
                 };
-                console.log(JSON.stringify(setQuery))
+                console.log(JSON.stringify(setQuery));
 
                 empCred.update(updateQuery,setQuery,{upsert : true}, function (error, result) {
                     if(error){
-                        return callback(true,outputResult(500,"Internal Server Error."))
+                        return asyncCallback(true,outputResult(500,"Internal Server Error."))
                     }
                     else{
-                        var db = dbConfig.mongoDbConn;
-                        var empCred = db.collection('EmployeeCredentials');
-
-                        var username = req.body.username;
-                        //var password = req.body.password;
-                        var password = crypto.createHash('md5').update(req.body.password).digest('hex');
-                        var findOneQuery = {
-                            "userEntity.username":username,
-                            "userEntity.password":password
-                        };
-
-                        console.log(JSON.stringify(findOneQuery))
-
-                        empCred.findOne(findOneQuery,{"_id":0}, function (error, result) {
-                            if(error){
-                                return callback(true,outputResult(500,"Internal Server Error."))
-                            }
-                            else{
-                                if(!result){
-                                    return callback(true,outputResult(404,"User not found."))
-                                }
-                                else{
-                                    req.session.userEntity = result.userEntity;
-                                    return callback(false,outputResult(200,result))
-                                }
-                            }
-                        });
+                        return asyncCallback(false,outputResult(200,"Successfully Updated"));
                     }
                 })
 
             }
+        ], function (error, result) {
+            if(error){
+                return callback(true,outputResult(500,"Internal Server Error."))
+            }
+            else{
+                req.session.userEntity = employee;
+                return callback(false,outputResult(200,{"userEntity":employee}))
+            }
         });
+
     }
     else{
         return callback(true,outputResult(400,"Bad or ill-formed request.."))
     }
 };
+
+exports.upsertUser = upsertUser;
 
 exports.deleteEmployee = function (req, callback) {
 

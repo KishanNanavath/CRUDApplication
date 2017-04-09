@@ -27,10 +27,10 @@
     </style>
 </head>
 <body ng-cloak ng-app="dashApp" ng-controller="dashCtrl">
-<md-toolbar md-scroll-shrink layout="row">
+<md-toolbar md-scroll-shrink layout="row" layout-align="center center" layout-padding>
     <div class="md-toolbar-tools">Dashboard</div>
     <div >
-        <md-button ng-click="logoutFunc()" type="button" class="md-accent md-raised">Logout</md-button>
+        <md-button ng-click="logoutFunc()" type="button" class="md-primary md-raised">Logout</md-button>
     </div>
 </md-toolbar>
 <md-card flex layout="column" layout-padding>
@@ -43,99 +43,71 @@
                             <div layout-padding layout="column" flex>
                                 <md-input-container>
                                     <label>First Name</label>
-                                    <input   ng-model="profile.firstName" ng-disabled="true" name="firstname" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                        <div ng-message="required">This is required!</div>
-                                        <div ng-message="md-maxlength">That's too long!</div>
-                                        <div ng-message="minlength">That's too short!</div>
-                                    </div>
+                                    <input   ng-model="profile.firstName" ng-disabled="!editProfile" name="firstname" required>
+
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Last Name</label>
-                                    <input  ng-model="profile.lastName" ng-disabled="true" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                        <div ng-message="required">This is required!</div>
-                                        <div ng-message="md-maxlength">That's too long!</div>
-                                        <div ng-message="minlength">That's too short!</div>
-                                    </div>
+                                    <input  ng-model="profile.lastName" ng-disabled="!editProfile" name="lastName"  required>
+
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Mobile Number</label>
-                                    <input  ng-disabled="true" ng-model="profile.mobileNumber" ng-disabled="true" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                        <div ng-message="required">This is required!</div>
-                                        <div ng-message="md-maxlength">That's too long!</div>
-                                        <div ng-message="minlength">That's too short!</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container>
-                                    <label>Email ID</label>
-                                    <input  ng-disabled="true" ng-model="profile.emailId" ng-disabled="true" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                        <div ng-message="required">This is required!</div>
-                                        <div ng-message="md-maxlength">That's too long!</div>
-                                        <div ng-message="minlength">That's too short!</div>
-                                    </div>
+                                    <input  ng-disabled="!editProfile" ng-model="profile.mobileNumber" ng-disabled="!editProfile" name="lastName"  required>
+
                                 </md-input-container>
                             </div>
                             <div layout-padding layout="column" flex>
                                 <md-input-container>
                                     <label>Department</label>
-                                    <input  ng-disabled="true" ng-model="profile.department" ng-disabled="true" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                        <div ng-message="required">This is required!</div>
-                                        <div ng-message="md-maxlength">That's too long!</div>
-                                        <div ng-message="minlength">That's too short!</div>
-                                    </div>
+                                    <input  ng-disabled="!editProfile" ng-model="profile.department" ng-disabled="!editProfile" name="lastName"  required>
+
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Joining Date</label>
-                                    <input  ng-disabled="true" ng-model="profile.joiningDate" ng-disabled="true" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                        <div ng-message="required">This is required!</div>
-                                        <div ng-message="md-maxlength">That's too long!</div>
-                                        <div ng-message="minlength">That's too short!</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container>
-                                    <label>User Name</label>
-                                    <input  ng-disabled="true" ng-model="profile.username" ng-disabled="true" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                        <div ng-message="required">This is required!</div>
-                                        <div ng-message="md-maxlength">That's too long!</div>
-                                        <div ng-message="minlength">That's too short!</div>
-                                    </div>
+                                    <input value="{{ profile.joiningDate | date: 'yyyy-MM-dd' }}" type="date" ng-disabled="!editProfile" ng-model="profile.joiningDate" required>
+
                                 </md-input-container>
                             </div>
                         </div>
-                        <!--<md-input-container>-->
-                            <!--<md-button type="submit" class="md-primary md-raised">Submit</md-button>-->
-                        <!--</md-input-container>-->
+                        <div layout="row" layout-padding ng-hide="!editProfile">
+                            <md-input-container flex>
+                                <md-button ng-click="cancelFunc()" type="button" class="md-primary md-raised">Cancel</md-button>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <md-button ng-disabled="isEmpty(profile)" type="submit" class="md-primary md-raised">Update</md-button>
+                            </md-input-container>
+                        </div>
+                        <md-input-container ng-hide="editProfile">
+                            <md-button ng-click="editFunc()" type="button" class="md-primary md-raised">Edit</md-button>
+                        </md-input-container>
                     </form>
                 </md-tab-body>
             </md-tab>
-            <md-tab label="Leave History">
+            <md-tab label="Leave History" ng-click="listLeaveHistory()">
                 <md-tab-body>
                     <md-list >
                         <md-list-item ng-repeat="leave in leavesList" class="md-2-line">
                             <div layout="row" class="md-list-item-text">
                                 <div flex="20">{{leave.fromDate | date:'dd-MM-yyyy'}}</div>
                                 <div flex="20">{{leave.toDate | date:'dd-MM-yyyy'}}</div>
-                                <div flex="10">{{leave.noOfDays}}</div>
+                                <!--<div flex="10">{{leave.noOfDays}}</div>-->
                                 <div flex>{{leave.remarks}}</div>
                                 <div flex="10">{{leave.status}}</div>
+                                <button ng-click="delLeave(leave)" flex="5" ng-disabled="leave.status !== 'Pending'">Del</button>
                             </div>
                         </md-list-item>
                     </md-list>
                 </md-tab-body>
             </md-tab>
-            <md-tab label="Holidays">
+            <md-tab label="Holidays" ng-click="listHolidays()">
                 <md-tab-body>
                     <md-list >
                         <md-list-item ng-repeat="holiday in holidayList" class="md-3-line">
+                            <!--{{holiday}}-->
                             <div layout="row" layout-padding class="md-list-item-text">
                                 <div flex>{{holiday.date | date:'dd-MM-yyyy'}}</div>
-                                <div flex="50">{{holiday.remarks}}</div>
+                                <div flex="40">{{holiday.remarks}}</div>
                             </div>
                         </md-list-item>
                     </md-list>
@@ -143,47 +115,34 @@
             </md-tab>
             <md-tab label="Request Leave">
                 <md-tab-body>
-                    <form name="userForm">
+                    <form name="userForm" ng-submit="addLeave()">
                         <div layout="row" layout-padding>
                             <md-input-container flex>
                                 <label>From Date</label>
                                 <!--<md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>-->
-                                <input type="date" name="lastName" required>
-                                <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                    <div ng-message="required">This is required!</div>
-                                    <div ng-message="md-maxlength">That's too long!</div>
-                                    <div ng-message="minlength">That's too short!</div>
-                                </div>
+                                <input ng-model="leave.fromDate" type="date" name="lastName" required>
                             </md-input-container>
                             <md-input-container flex>
                                 <label>To Date</label>
                                 <!--<md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>-->
 
-                                <input type="date" name="lastName" required>
-                                <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                    <div ng-message="required">This is required!</div>
-                                    <div ng-message="md-maxlength">That's too long!</div>
-                                    <div ng-message="minlength">That's too short!</div>
-                                </div>
+                                <input ng-model="leave.toDate" type="date" name="lastName" required>
+
                             </md-input-container>
                             <md-input-container flex>
                                 <label>Type</label>
-                                <input type="text" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                                <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                    <div ng-message="required">This is required!</div>
-                                    <div ng-message="md-maxlength">That's too long!</div>
-                                    <div ng-message="minlength">That's too short!</div>
-                                </div>
+                                <input type="text" name="lastName" ng-model="leave.type" required>
+
                             </md-input-container>
+                            <!--<md-input-container flex>-->
+                                <!--<label>Number of Days</label>-->
+                                <!--<input type="number" name="lastName" ng-model="leave.noOfDays" required>-->
+                            <!--</md-input-container>-->
                         </div>
                         <md-input-container>
                             <label>Remarks</label>
-                            <input type="text" name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
-                            <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                                <div ng-message="required">This is required!</div>
-                                <div ng-message="md-maxlength">That's too long!</div>
-                                <div ng-message="minlength">That's too short!</div>
-                            </div>
+                            <input type="text" name="lastName" ng-model="leave.remarks" required>
+
                         </md-input-container>
                         <md-input-container>
                             <md-button type="submit" class="md-primary md-raised">Submit</md-button>

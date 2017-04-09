@@ -21,7 +21,7 @@ app.post('/api/v1.0/login', function(req, res){
 //post request for login by supplier.
 app.post('/api/v1.0/register', function(req, res){
     console.log("reg",JSON.stringify(req.body));
-    EmployeeLogin.upsertUser(req, function(err, regres){
+    EmployeeLogin.register(req, function(err, regres){
         res.statusCode =  regres.http_code;
         res.json(regres);
     });
@@ -66,6 +66,9 @@ app.post('/api/v1.0/employeeList', function(req, res){
 app.get('/api/v1.0/listHolidays', function(req, res){
     if(req.session.userEntity){
         holidays.listHolidays(req, function(err, regres){
+            res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+            res.header("Pragma", "no-cache");
+            res.header("Expires", 0);
             res.statusCode =  regres.http_code;
             res.json(regres);
         });
@@ -84,6 +87,24 @@ app.get('/api/v1.0/listHolidays', function(req, res){
 app.post('/api/v1.0/listLeaves', function(req, res){
     if(req.session.userEntity){
         holidays.listLeaves(req, function(err, regres){
+            res.statusCode =  regres.http_code;
+            res.json(regres);
+        });
+    }
+    else{
+        var regres = {
+            "http_code": 401,
+            "message": "No active session found."
+        };
+        res.statusCode =  regres.http_code;
+        res.json(regres);
+    }
+});
+
+//post request for login by supplier.
+app.post('/api/v1.0/applyLeave', function(req, res){
+    if(req.session.userEntity){
+        holidays.applyLeave(req, function(err, regres){
             res.statusCode =  regres.http_code;
             res.json(regres);
         });
@@ -121,6 +142,24 @@ app.post('/api/v1.0/viewProfile', function(req, res){
     console.log("ki",JSON.stringify(req.body));
     if(req.session.userEntity){
         EmployeeLogin.viewProfile(req, function(err, regres){
+            res.statusCode =  regres.http_code;
+            res.json(regres);
+        });
+    }
+    else{
+        var regres = {
+            "http_code": 401,
+            "message": "No active session found."
+        };
+        res.statusCode =  regres.http_code;
+        res.json(regres);
+    }
+});
+
+//post request for login by supplier.
+app.post('/api/v1.0/deleteLeave', function(req, res){
+    if(req.session.userEntity){
+        holidays.deleteLeave(req, function(err, regres){
             res.statusCode =  regres.http_code;
             res.json(regres);
         });

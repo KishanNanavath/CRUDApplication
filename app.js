@@ -18,12 +18,14 @@ app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
 app.use(function(req, res, next) {
+    req.headers['if-none-match'] = 'no-match-for-this';
     res.header("Access-Control-Allow-Origin", req.headers.origin);
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS");
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
+app.disable('etag');
 
 var empDetails = require('./routes/EmployeeDetails/EmployeeDetails.js');
 

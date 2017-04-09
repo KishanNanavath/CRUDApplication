@@ -30,38 +30,50 @@ myapp.factory('myService', function($http) {
     };
 });
 
-myapp.controller('MainCtrl',['$location','$window','$scope','myService',function ($location,$window,$scope,myService) {
+myapp.controller('MainCtrl',['$mdBottomSheet','$location','$window','$scope','myService',function ($mdBottomSheet,$location,$window,$scope,myService) {
+    if(sessionStorage.userEntity){
+        $window.location.href = '/static/html/employeeDashboard.html';
+    }
+
     var baseUrl = $location.$$protocol + '://' + $location.$$host+':'+$location.port();
+
+    $scope.isEmpty = function (obj) {
+        for (var i in obj) if (obj.hasOwnProperty(i)) return false;
+        return true;
+    };
+
+    $scope.departments = ["Engineering","Quality Analysis","Product Management","UI Developers"];
 
     $scope.loginFunc = function () {
         myService.async("POST",baseUrl+"/employee//api/v1.0/login",JSON.stringify($scope.loginObj)).success(function (response) {
             $scope.loginObj = {};
-            // The then function here is an opportunity to modify the response
             console.log(response);
-            // The return value gets picked up by the then in the controller.
+            sessionStorage.userEntity = JSON.stringify(response.message.userEntity);
             $window.location.href = '/static/html/employeeDashboard.html';
             return response.data;
         }).error(function (response) {
             $scope.loginObj = {};
             console.log(response);
+            $mdBottomSheet.show({
+                template: '<md-bottom-sheet style="background-color: #ff0000">'+response.message+'</md-bottom-sheet>'
+            });
             return response.data;
         });
     };
 
     $scope.registerUser = function () {
-        alert(JSON.stringify($scope.profile.emailId));
-        alert(JSON.stringify($scope.profile));
         myService.async("POST",baseUrl+"/employee/api/v1.0/register",JSON.stringify($scope.profile)).success(function (response) {
             $scope.loginObj = {};
-            // The then function here is an opportunity to modify the response
             console.log(response);
-            alert(JSON.stringify(response));
-// The return value gets picked up by the then in the controller.
+            sessionStorage.userEntity = JSON.stringify(response.message.userEntity);
             $window.location.href = '/static/html/employeeDashboard.html';
             return response.data;
         }).error(function (response) {
-            $scope.loginObj = {};
-            alert(JSON.stringify(response));
+            console.log("ERROR");
+            $scope.profile.password = "";
+            $mdBottomSheet.show({
+                template: '<md-bottom-sheet style="background-color: #ff0000">'+response.message+'</md-bottom-sheet>'
+            });
             console.log(response);
             return response.data;
         });

@@ -17,6 +17,7 @@
     "express": "4.13.3",
     "express-jwt": "3.3.0",
     "express-session": "^1.14.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "async": "1.5.2"
   }
 }

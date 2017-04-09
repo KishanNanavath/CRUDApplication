@@ -55,49 +55,54 @@
                             <div layout-padding layout="column" flex>
                                 <md-input-container>
                                     <label>First Name</label>
-                                    <input ng-model="profile.firstName" ng-disabled="false" name="firstname" required md-maxlength="10" minlength="4">
+                                    <input ng-model="profile.firstName" ng-disabled="false" name="firstname" required >
 
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Last Name</label>
-                                    <input ng-model="profile.lastName" ng-disabled="false" name="lastName" required md-maxlength="10" minlength="4">
+                                    <input ng-model="profile.lastName" ng-disabled="false" name="lastName" required >
 
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Mobile Number</label>
-                                    <input type="tel" ng-model="profile.mobileNumber" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+                                    <input type="number" ng-model="profile.mobileNumber" ng-disabled="false" required name="lastName" required maxlength="10" minlength="10">
 
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Email ID</label>
-                                    <input type="email" ng-model="profile.emailId" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+                                    <input type="email" ng-model="profile.emailId" ng-disabled="false" required name="lastName" required >
                                 </md-input-container>
                             </div>
                             <div layout-padding layout="column" flex>
                                 <md-input-container>
                                     <label>Department</label>
-                                    <input ng-model="profile.department" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
-
+                                    <input ng-model="profile.department" ng-disabled="false" required name="lastName" required >
+                                    <!--<select ng-model="profile.department" ng-options="department for department in departments">-->
+                                    <!--<input type="text" ng-model="profile.department"  typeahead="department for department in departments"/>-->
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Joining Date</label>
-                                    <input ng-model="profile.joiningDate" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
-
+                                    <input type="date" ng-model="profile.joiningDate" ng-disabled="false" required name="lastName" required >
                                 </md-input-container>
                                 <md-input-container>
                                     <label>User Name</label>
-                                    <input ng-model="profile.username" ng-disabled="false" required name="lastName" required md-maxlength="10" minlength="4">
+                                    <input ng-model="profile.username" ng-disabled="false" required name="lastName" required >
 
                                 </md-input-container>
                                 <md-input-container>
                                     <label>Password</label>
-                                    <input ng-model="profile.password" ng-disabled="false" required type="password" name="lastName" required md-maxlength="10" minlength="4">
+                                    <input ng-model="profile.password" ng-disabled="false" required type="password" name="lastName" required >
                                 </md-input-container>
                             </div>
                         </div>
-                        <md-input-container>
-                            <md-button type="submit" class="md-primary md-raised">Submit</md-button>
-                        </md-input-container>
+                        <div layout="row" layout-padding>
+                            <md-input-container flex>
+                                <md-button ng-click="profile = {}" ng-disabled="isEmpty(profile)" type="button" class="md-primary md-raised">Reset</md-button>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <md-button ng-disabled="isEmpty(profile)" type="submit" class="md-primary md-raised">Submit</md-button>
+                            </md-input-container>
+                        </div>
                     </form>
 
                 </md-tab-body>
